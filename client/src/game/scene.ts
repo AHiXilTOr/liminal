@@ -159,12 +159,25 @@ export class Game {
           const human = createHumanoid({
             seed: msg.id,
             height: 1.8,
-            build: 0.9,           // было 'slim' — теперь число (0.85…1.2)
-            colors: {             // явные цвета вместо palette
-              skin: 0xdeb887,
-              top: 0x1a1a2e,      // «suit» в anima3d — это top
-              bottom: 0x1a1a2e,   // брюки
+            build: 0.95,
+            // Желтый комбинезон: верх и низ одного цвета.
+            colors: {
+              top: 0xE8D44D,      // ярко-желтый, как у ASYNC
+              bottom: 0xE8D44D,   // тот же цвет, чтобы читался как цельный комбинезон
+              boots: 0x111111,    // черные ботинки
+              skin: 0xD2B48C,     // нейтральный тон (лицо все равно будет за визором)
+              hair: 0x222222,     // темные волосы (если не скроются шлемом)
             },
+            // Длинные рукава и пиджак/туника создают силуэт комбинезона.
+            outfit: {
+              top: 'jacket',
+              bottom: 'pants',
+              sleeves: 'long',
+              collar: true,
+              belt: true,
+            },
+            // 'hat' садится на голову и вместе с темным цветом имитирует капюшон/визор.
+            accessories: ['hat'],
           });
           // human.object — это THREE.Object3D, который можно добавить в сцену.
           this.scene.add(human.object);
