@@ -1,0 +1,29 @@
+# --- Rust ---
+# Скомпилированные артефакты Cargo. Их не коммитят никогда.
+/target/
+**/target/
+# Cargo.lock коммитим, потому что у нас есть бинарник (сервер),
+# и мы хотим воспроизводимых сборок.
+# **/*.rs.bk
+# *.pdb
+# *.rlib
+# *.rmeta
+
+# --- Node / TypeScript / Vite ---
+# Зависимости ставятся из package.json / bun.lock, в git им не место.
+**/node_modules/
+**/dist/
+**/.vite/
+*.tsbuildinfo
+vite.config.ts.timestamp*
+
+# --- Логи и окружение ---
+*.log
+.env
+.env.local
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

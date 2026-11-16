@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>crowd_world: liminal</title>
+    <style>
+      /* Сброс отступов и запрет скролла: сцена и меню занимают весь экран. */
+      body { margin: 0; overflow: hidden; background: #000; font-family: system-ui, sans-serif; }
+      canvas { display: block; }
+
+      /* Все «экраны» (меню, настройки) — это fullscreen-оверлеи поверх сцены.
+         position: fixed + inset: 0 = растянуть на весь viewport. */
+      .screen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        background: #0e0e0e;
+        color: #c2b280;
+        z-index: 10;
+      }
+
+      /* Игровой контейнер лежит под меню и растягивается на весь экран. */
+      #game {
+        position: fixed;
+        inset: 0;
+      }
+
+      /* .hidden — универсальный класс для скрытия элемента.
+         Мы не используем display: none напрямую в JS, чтобы не смешивать
+         стили и логику: вся видимость управляется классом. */
+      .hidden { display: none !important; }
+
+      h1 { font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; }
+      button {
+        background: transparent;
+        border: 1px solid #c2b280;
+        color: #c2b280;
+        padding: 12px 32px;
+        font-size: 16px;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      button:hover { background: #c2b280; color: #0e0e0e; }
+
+      label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+      input[type="range"] { width: 240px; }
+    </style>
+  </head>
+  <body>
+    <!-- Стартовый экран -->
+    <div id="menu" class="screen">
+      <h1>crowd_world: liminal</h1>
+      <button id="btn-join">Присоединиться</button>
+      <button id="btn-settings">Настройки</button>
+    </div>
+
+    <!-- Экран настроек, изначально скрыт -->
+    <div id="settings" class="screen hidden">
+      <h1>Настройки</h1>
+      <label>
+        Чувствительность мыши
+        <input id="sensitivity" type="range" min="0.001" max="0.05" step="0.001" />
+        <span id="sensitivity-value"></span>
+      </label>
+      <button id="btn-back">Назад</button>
+    </div>
+
+    <!-- Контейнер для 3D-сцены, изначально скрыт -->
+    <div id="game" class="hidden"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
