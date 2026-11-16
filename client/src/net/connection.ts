@@ -33,10 +33,9 @@ export class Connection {
     this.ws.addEventListener('close', () => onClose());
   }
 
-  sendMove(x: number, y: number, z: number): void {
-    // readyState проверяем, потому что send() на закрытом сокете бросит исключение.
+  sendMove(x: number, y: number, z: number, yaw: number): void {
     if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(encodeMove(x, y, z));
+      this.ws.send(encodeMove(x, y, z, yaw));
     }
   }
 

@@ -97,8 +97,22 @@ export class Game {
     // Не нужно держать кнопку — просто захватили и двигаете.
     // Escape отпускает захват (стандартное поведение браузера).
     canvas.addEventListener('click', () => {
-      if (document.pointerLockElement !== canvas) {
-        canvas.requestPointerLock();
+      // Уже в захвате — ничего не делаем.
+      if (document.pointerLockElement === canvas) return;
+
+      // requestPointerLock() может вернуть Promise (новые Chrome) или
+      // undefined (старые браузеры / Firefox). Оборачиваем на случай обоих
+      // и игнорируем отказ: если пользователь только что нажал Escape,
+      // браузер блокирует захват ~1 сек. — при следующем клике сработает.
+      try {
+        const result = canvas.requestPointerLock() as unknown;
+        if (result instanceof Promise) {
+          result.catch(() => {
+            // Тихо игнорируем SecurityError.
+          });
+        }
+      } catch {
+        // Некоторые браузеры бросают синхронно — тоже игнорируем.
       }
     });
 
@@ -164,7 +178,7 @@ export class Game {
 
         // Обновляем позицию. Гуманоид стоит на полу, поэтому y = 0.
         entry.human.object.position.set(msg.x, 0, msg.z);
-        entry.human.object.rotation.y = msg.yaw;
+        entry.human.object.rotation.y = msg.yaw + Math.PI;
 
         // Оцениваем скорость по дельте позиции, чтобы анимация знала,
         // идёт персонаж или стоит. Это приблизительно: точная скорость
